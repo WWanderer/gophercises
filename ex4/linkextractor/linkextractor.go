@@ -7,9 +7,19 @@ import (
 	"golang.org/x/net/html"
 )
 
-// GetHTMLTree extracts the dom tree of an html file
+// Parse takes an html stream as an input and extracts links
+// and the matching text 
+func Parse(r io.Reader) ([]Link, error) {
+	tree, err := getHTMLTree(r)
+	if err != nil {
+		return nil, err
+	}
+	return extractLinks(tree), nil
+}
+
+// getHTMLTree extracts the dom tree of an html file
 // and stores it in a tree structure
-func GetHTMLTree(r io.Reader) (*html.Node, error) {
+func getHTMLTree(r io.Reader) (*html.Node, error) {
 	tree, err := html.Parse(r)
 	if err != nil {
 		return nil, err
@@ -24,7 +34,7 @@ type Link struct {
 	Text string
 }
 
-func ExtractLinks(root *html.Node) []Link {
+func extractLinks(root *html.Node) []Link {
 	var links []Link
 	nodes := linkNodes(root)
 	for _, n := range nodes {

@@ -13,11 +13,5 @@ func main() {
 		panic(err)
 	}
 
-	t, err := linkextractor.GetHTMLTree(f)
-	if err != nil {
-		panic(err)
-	}
-
-	links := linkextractor.ExtractLinks(t)
-	fmt.Println(links)
+	fmt.Println(linkextractor.Parse(f))
 }
